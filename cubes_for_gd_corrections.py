@@ -24,12 +24,15 @@ import gzip
 import subprocess
 # %
 # %%
-
+##############################################
+# to be compiled in  TEATIME
+##############################################
 field = 'B6'
-filtro = 'H'
+filtro = 'Ks'
 
 folder = '/home/data/raw/2015/%s/Field/%s/'%(filtro,field)
-pruebas = '/home/alvaro/geometric_dis/pruebas/'
+pruebas = '/Volumes/teatime-data/alvaro/geometric_dis/%s/%s/pruebas/'%(filtro,field)
+cubes_alig = '/Volumes/teatime-data/alvaro/geometric_dis/%s/%s/cubes_aligned/'%(filtro,field)
 sf_folder = '/home/data/GNS/2015/%s/%s/data/'%(filtro,field)
 clean = '/home/data/GNS/2015/%s/%s/cleaned/'%(filtro,field)
 VVV_fol = '/home/data/working/GNS_1/VVV/'
@@ -54,7 +57,7 @@ dic_sl = {}
 # %%
 
 image_i = 0
-with open(pruebas + '%s_cubes_and_slices.txt'%(field),'w') as fil:
+with open(cubes_alig + '%s_cubes_and_slices.txt'%(field),'w') as fil:
     fil.write('Cube_id number_of_slices\n')
 for li,l in enumerate(lista):
     
@@ -109,7 +112,8 @@ for li,l in enumerate(lista):
     
     print(30*'_'+f'\nCube {li+1} has %s slices\n'%(cube[0].header['NAXIS3'])+30*'_')
     
-    with open(pruebas + '%s_cubes_and_slices.txt'%(field),'a') as fil:
+
+    with open(cubes_alig + '%s_cubes_and_slices.txt'%(field),'a') as fil:
         fil.write('%s %s\n'%(li+1,cube[0].header['NAXIS3']-1))
     use_idx = vvv['J']<900
     vvv_data = vvv[use_idx]
@@ -273,9 +277,10 @@ for li,l in enumerate(lista):
                 # Create an ImageHDU with the data and the corresponding header
                 # image_hdu = fits.ImageHDU(data=data, header=header)
                 # m_hdu =     fits.ImageHDU(data = m_data, header = header)
-                fits.writeto(pruebas + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
+
+                fits.writeto(cubes_alig + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
                              data = data, header = header, overwrite= True)
-                fits.writeto(pruebas + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
                              data = m_data, header = header, overwrite= True)
                 
             
@@ -291,9 +296,9 @@ for li,l in enumerate(lista):
                         header[card.keyword] = card.value
                 # Create an ImageHDU with the data and the corresponding header
                 # image_hdu = fits.ImageHDU(data=data, header=wcs_header)
-                fits.writeto(pruebas + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
                              data = data, header = header, overwrite= True)
-                fits.writeto(pruebas + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
                              data = m_data, header = header, overwrite= True)
             # image_i -= cube[0].header['NAXIS3']   
             if chip == 3:
@@ -307,9 +312,9 @@ for li,l in enumerate(lista):
                         header[card.keyword] = card.value
                 # Create an ImageHDU with the data and the corresponding header
                 # image_hdu = fits.ImageHDU(data=data, header=wcs_header)
-                fits.writeto(pruebas + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
                              data = data, header = header, overwrite= True)
-                fits.writeto(pruebas + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
                              data = m_data, header = header, overwrite= True)
                 
                
@@ -324,18 +329,19 @@ for li,l in enumerate(lista):
                         header[card.keyword] = card.value
                 # Create an ImageHDU with the data and the corresponding header
                 # image_hdu = fits.ImageHDU(data=data, header=wcs_header)
-                fits.writeto(pruebas + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
                              data = data, header = header, overwrite= True)
-                fits.writeto(pruebas + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
                              data = m_data, header = header, overwrite= True)
         image_i -=  cube[0].header['NAXIS3']-1
     print(30*'+',f'\nAfter cube{li}, index ={image_i} \n',30*'+')
     dic_sl['l%s'%(li)] = cube[0].header['NAXIS3']-1
     os.remove(clean + 'cube%s.fits'%(li+1))
-sys.exit(334)
+
+# sys.exit(334)
 # %%
 for chip in range(1,5):
-    command = ['missfits', pruebas + '%s_image_c%s'%(field,chip), '-c', 'conf.missfits']
+    command = ['missfits', cubes_alig + '%s_image_c%s'%(field,chip), '-c', 'conf.missfits']
     
     try:
         # Run the command

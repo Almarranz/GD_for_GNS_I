@@ -11,13 +11,13 @@
 #### 0.1 Optional: Remove Bad Frames
 - Use `delete_bad.py` if additional bad slices are detected after inspection. In principle, the cubes used in `cubes_for_gd_corrections.py` should already be cleaned of bad frames.
 
-### ⚠️ Important Warning:
-- The Astromatic software is currently **not working properly** on `teatime`, except for `MISSFITS`.  
-- For the subsequent steps, **move the cubes generated in the previous steps to `teabag`** to continue processing.  
+### WARNING
+____
+- For the moment, the Astromatic sofware is not woriking properly in `teatime`, with the exception of `MISSFITS`. 
+- For this point on you have to move the cubes geneated in the previous steps to `**teabag**`
+___
 
-## Astromatic.py
 
-- Runs `sextractor`, `scamp` and `SWarp`.
 
 ### 1. Run Source Extractor
 - Execute `source-extractor cube.fits -c default_c[1,2,3,4].sex`. This will generate a **MEF (Multi-Extension FITS)** file with different pointings, with an extension for each image.
