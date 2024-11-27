@@ -11,7 +11,7 @@ import time
 # This scrip run all the three astromatic programs used for the corrections of geometric distorsion in GNS1
 # %%           
 field = 'B6'
-band = 'H'
+band = 'Ks'
 sex_folder =   '/home/data/alvaro/gns_gd/gns1/%s/%s/sextractor/'%(band,field)
 scamp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/scamp/'%(band,field)
 SWarp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/'%(band,field)
@@ -19,9 +19,10 @@ cubes_aligned ='/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band,field)
 out_folder = SWarp_folder + 'outputs/'
 sys.exit(20)
 # %%
+ch_range = [1,2]
 #SOURCE-EXTRACTOR
 t0_sex = time.time()
-for chip in range(3,5):
+for chip in range(ch_range[0],ch_range[1]):
     command = ['source-extractor', cubes_aligned + '%s_image_c%s.fits'%(field,chip), 
                '-c', 'default_c%s.sex'%(chip), '-CATALOG_NAME','%s_image_c%s.cat'%(field, chip)
                ]
@@ -50,7 +51,7 @@ print(30*'_' + '\nDone with SExtractor\nIt tooks %.0f sec\n'%(t_sex) + 30*'_')
 # %%
 #SCAMP
 t0_sca = time.time()
-for chip in range(3,5):
+for chip in range(ch_range[0],ch_range[1]):
     command = ['scamp', sex_folder + 'chip%s/%s_image_c%s.cat'%(chip, field,chip), 
                 '-c', 'scamp_c%s.conf'%(chip), '-HEADER_NAME', '%s_image_c%s.head'%(field, chip)
                 ,'-FULLOUTCAT_NAME','%s_full_c%s.cat'%(field, chip)]
@@ -77,7 +78,7 @@ print(30*'_' + '\nDone with Scamp\nIt tooks %.0f sec\n'%(t_sca) + 30*'_')
 #%%
 #SWARP
 t0_swa = time.time()
-for chip in range(3,5):
+for chip in range(ch_range[0],ch_range[1]):
     
     command = ['SWarp', cubes_aligned+ '%s_image_c%s.fits' %(field, chip), 
                '-c', 'default_c%s.swarp'%(chip), '-HEADER_NAME',scamp_folder + 'chip%s/%s_image_c%s.head'%(chip,field, chip),
