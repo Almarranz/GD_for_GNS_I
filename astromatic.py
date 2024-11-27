@@ -17,7 +17,7 @@ scamp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/scamp/'%(band,field)
 SWarp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/'%(band,field)
 cubes_aligned ='/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band,field)
 out_folder = SWarp_folder + 'outputs/'
-sys.exit(20)
+# sys.exit(20)
 # %%
 ch_range = [1,2]
 #SOURCE-EXTRACTOR
