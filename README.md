@@ -1,8 +1,32 @@
 # Geometric Distortions in GNS
 
+
+## There is not yet a define pipeline. Here the name and description of some scripts
+
+## 
+- Runs `missfits`on cubes to divide them into slices. Then make a .list file containing the paths and names of the slices and feed with it `maxitrack`
+- **% missfits -d > default.missfits** generates de default configurataion file. 
+- On the configuration file you can set `OUTFILE_TYPE  SPLIT` and `SAVE_TYPE NEW`. This would slice the MEF and conserve the original file, while saving the slices under a new name.
+- Make a .list files with then names and tha absolutes paths of the new genareted *miss* slices: ** ls *.miss.fits | xargs realpath > part[1,1]_c[1,2,3,4]_fits.list **
+
+### maxitract_chips.sh 
+- Runs maxitract on fits slices for diffentes chips and rename the output file maxitract.output
+
+### maxitraxt_bad_slices.py
+
+- Combines all the maxitrack output files in a single list. This is combinient for comparing the bad slices selected by maxitrack with the bad slices selected by the operator (me)
+
+
+
+
+
+
+# OFFDATED
+
 ## Steps to Estimate and Apply Geometric Distortions (GD) on GNS2
 
 ---
+
 
 ### 0. Prepare Cubes for GD Corrections
 - Run `cubes_for_gd_corrections.py` to group all the cleaned cubes (reduced for sky, flat-fielded, and cleaned for cosmic rays) into four FITS files, one for each chip.
@@ -39,3 +63,5 @@
 ---
 
 Follow these steps to properly apply geometric distortion corrections to GNS2 data.
+
+

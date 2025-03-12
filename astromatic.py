@@ -14,7 +14,7 @@ import shutil
 # This scrip run all the three astromatic programs used for the corrections of geometric distorsion in GNS1
 # %%           
 field = 'B6'
-band = 'Ks'
+band = 'J'
 sex_folder =   '/home/data/alvaro/gns_gd/gns1/%s/%s/sextractor/'%(band,field)
 scamp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/scamp/'%(band,field)
 SWarp_folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/'%(band,field)
@@ -23,7 +23,7 @@ scripts = '/home/data/alvaro/gns_gd/gns1/scripts/'
 out_folder = SWarp_folder + 'outputs/'
 
 # %%
-ch_range = [2,5]
+ch_range = [1,5]
 #SOURCE-EXTRACTOR
 t0_sex = time.time()
 for chip in range(ch_range[0],ch_range[1]):

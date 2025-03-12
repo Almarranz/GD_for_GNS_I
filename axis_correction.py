@@ -17,29 +17,31 @@ import glob
 pruebas = '/home/data/alvaro/gns_test/gns1/B6/geometric_dis/pruebas/'
 
 field = 'B6'
-band = 'Ks'
+band = 'J'
 ax1_size = 2048
 ax2_size = 768
-ch_range = [1,2]
+ch_range = [1,5]
 # sys.exit(24)
 # %% /Volumes/teabag-data
 for chip in range(ch_range[0],ch_range[1]):
     tc0 = time.time()
     #This run the program from teatime
-    # folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
-    # folder_gd = '/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
-    # slice_list =  '/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band, field)
+    folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
+    folder_gd = '/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
+    slice_list =  '/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band, field)
     
     # This run the program from my local machine
-    folder = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
-    folder_gd = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
-    slice_list =  '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band, field)
+    # folder = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
+    # folder_gd = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
+    # slice_list =  '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/'%(band, field)
     
     # folder = pruebas
     fits_files = [f for f in sorted(os.listdir(folder)) if f.endswith('.fits') and f.startswith('%s_image_c%s' % (field, chip)) or f.startswith('%s_image_c%s' % (field, chip)) and f.endswith('resamp.weight.fits')]
     # fits_files = fits_files[0:2] 
     # sys.exit(25)    
     for nf, f_file in enumerate(fits_files):
+        # if nf<1600:
+        #     continue
         hdul = fits.open(folder + f_file)
         image_data = hdul[0].data
         ejes = [hdul[0].header['NAXIS1'], hdul[0].header['NAXIS2']]
@@ -50,12 +52,13 @@ for chip in range(ch_range[0],ch_range[1]):
         axis1, axis2 = ejes
 
         # Calculate crop/padding amounts for each axis
-        crop_pad_axis1 = (axis1 - ax1_size) // 2
-        crop_pad_axis2 = (axis2 - ax2_size) // 2
+        crop_pad_axis1 = abs(axis1 - ax1_size) // 2
+        crop_pad_axis2 = abs(axis2 - ax2_size) // 2
         
         if (axis1 - ax1_size) < -0 or (axis2 - ax2_size) < -0:
             print(30*'∫' + f'\nCheck this one {f_file}\n' + 30*'∫')
-
+        # else:
+        #     continue
         
         # Process for axis 1 if not equal to target size
         if axis1 != ax1_size:
@@ -122,6 +125,10 @@ ax2_sz = ax2_size
 for chip in range(ch_range[0],ch_range[1]):
     folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
     folder_gd = '/home/data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
+    
+    # folder = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
+    # folder_gd = '/Volumes/teabag-data/alvaro/gns_gd/gns1/%s/%s/cubes_gd/chip%s/'%(band, field, chip)
+
     # for n,fi in enumerate(fits_files):
     idex = 1
     for i in range(len(sl)):
@@ -145,35 +152,35 @@ for chip in range(ch_range[0],ch_range[1]):
 # # This part delete de padded and intermediate products
 # =============================================================================        
     
-#       # Iterate over each chip subfolder
-# for chip in range(ch_range[0],ch_range[1]):
-#     folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
-#     fits_files = glob.glob(os.path.join(folder, '*.fits'))  # Find all .fits files
-#     # for i in fits_files:
-#     #     print(i)
-#     for fits_file in fits_files:
-#         try:
-#             os.remove(fits_file)  # Remove the FITS file
-#             print(f"Deleted: {fits_file}")
-#         except Exception as e:
-#             print(f"Error deleting {fits_file}: {e}")
+      # Iterate over each chip subfolder
+for chip in range(ch_range[0],ch_range[1]):
+    folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/SWarp/outputs/chip%s/'%(band,field, chip)
+    fits_files = glob.glob(os.path.join(folder, '*.fits'))  # Find all .fits files
+    # for i in fits_files:
+    #     print(i)
+    for fits_file in fits_files:
+        try:
+            os.remove(fits_file)  # Remove the FITS file
+            print(f"Deleted: {fits_file}")
+        except Exception as e:
+            print(f"Error deleting {fits_file}: {e}")
 
-# print("All FITS files is SWarp removed.")  
+print("All FITS files is SWarp removed.")  
         
-# for chip in range(ch_range[0],ch_range[1]):
-#     folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/sextractor/chip%s/'%(band,field, chip)
-#     fits_files = glob.glob(os.path.join(folder, '*.fits'))  # Find all .fits files
-#     # for i in fits_files:
-#     #     print(i)
-#     for fits_file in fits_files:
-#         try:
-#             os.remove(fits_file)  # Remove the FITS file
-#             print(f"Deleted: {fits_file}")
-#         except Exception as e:
-#             print(f"Error deleting {fits_file}: {e}")
+for chip in range(ch_range[0],ch_range[1]):
+    folder = '/home/data/alvaro/gns_gd/gns1/%s/%s/sextractor/chip%s/'%(band,field, chip)
+    fits_files = glob.glob(os.path.join(folder, '*.fits'))  # Find all .fits files
+    # for i in fits_files:
+    #     print(i)
+    for fits_file in fits_files:
+        try:
+            os.remove(fits_file)  # Remove the FITS file
+            print(f"Deleted: {fits_file}")
+        except Exception as e:
+            print(f"Error deleting {fits_file}: {e}")
         
         
-# print("All FITS files is sextractor removed.")  
+print("All FITS files is sextractor removed.")  
 # %%
 # =============================================================================
 # # Be careful!!This part delete the original aligned cubes.

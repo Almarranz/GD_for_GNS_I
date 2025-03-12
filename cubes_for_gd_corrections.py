@@ -28,7 +28,7 @@ import subprocess
 # to be compiled in  TEATIME
 ##############################################
 field = 'B6'
-filtro = 'Ks'
+filtro = 'H'
 
 folder = '/home/data/raw/2015/%s/Field/%s/'%(filtro,field)
 pruebas = '/Volumes/teatime-data/alvaro/geometric_dis/%s/%s/pruebas/'%(filtro,field)
@@ -38,6 +38,9 @@ clean = '/home/data/GNS/2015/%s/%s/cleaned/'%(filtro,field)
 VVV_fol = '/home/data/working/GNS_1/VVV/'
 # ims = '/home/data/GNS/2021/H/20/ims/'
 ims = '/home/data/GNS/2015/%s/%s/ims/'%(filtro,field)
+slices_folder = '/home/data/alvaro/gns_gd/gns1/H/%s/cubes_gd/slices/'%(field)
+
+
 ###########IMPORTANT################
 # list of raw images and raw images are in /home/data/raw/GNS_2/H/Field/20
 # list of cleand cubes is in '/home/data/GNS/2021/H/20/cleaned'
@@ -151,7 +154,7 @@ for li,l in enumerate(lista):
     xh = (max(x_vvv) + min(x_vvv))/2
     yh = (max(y_vvv) + min(y_vvv))/2
     #crop list for each chip
-    for chip in range(1,5):
+    for chip in range(1,2):
        
         if (chip == 1):
             idx = np.nonzero((x_vvv < xh) & (y_vvv < yh))
@@ -331,14 +334,14 @@ for li,l in enumerate(lista):
                 # image_hdu = fits.ImageHDU(data=data, header=wcs_header)
                 fits.writeto(cubes_alig + '%s_image_c%s.%04d.fits'%(field,chip,image_i),
                              data = data, header = header, overwrite= True)
-                fits.writeto(cubes_alig + '%s_mask_c%s.%04d.fits'%(field,chip,image_i),
+                fits.writeto(cubes_alig + '%s_imgage_c%s.%04d.weight.fits'%(field,chip,image_i),
                              data = m_data, header = header, overwrite= True)
         image_i -=  cube[0].header['NAXIS3']-1
     print(30*'+',f'\nAfter cube{li}, index ={image_i} \n',30*'+')
     dic_sl['l%s'%(li)] = cube[0].header['NAXIS3']-1
     os.remove(clean + 'cube%s.fits'%(li+1))
 
-# sys.exit(334)
+sys.exit(334)
 # %%
 for chip in range(1,5):
     command = ['missfits', cubes_alig + '%s_image_c%s'%(field,chip), '-c', 'conf.missfits']
