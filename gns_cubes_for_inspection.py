@@ -31,13 +31,12 @@ band = 'H'
 # locat = '/Volumes/teabag-alvaro/'
 locat = '/home/data/alvaro/'
 # cubes_aligned = '/home/data/alvaro/gns_gd/gns2/F%s/cubes_aligned/'%(field)
-cubes_folder = locat + 'gns_gd/gns1/%s/%s/cubes_gd/slices'%(band,field)
+cubes_folder = locat + 'gns_gd/gns1/%s/%s/cubes_gd/slices/'%(band,field)
 
 pruebas = locat + 'gns_gd/gns1/%s/pruebas/'%(field)
 
 clean = locat + 'gns_gd/gns1/H/%s/cleaned/'%(field)
 
-ims = '/home/data/GNS/2021/H/20/ims/'
 tmp = locat  + 'gns_gd/gns1/H/%s/tmp/'%(field)
 
 # clean = pruebas
@@ -113,17 +112,17 @@ for i, li in  enumerate(lista):
     
     
     
-    
+# sys.exit(116)
 # 
 for chip in range(1,5):
   
     # command = ['missfits', f'cubes_f{field}_c{chip}', '-outfile_type', 'cube', '-SAVE_TYPE', 'REPLACE', '-SLICE_SUFFIX','.%04d.fits']  
     # command = ['missfits', f'cubes_f{field}_c{chip}', '-c', 'default_2.missfits']  
 
-    command = ['missfits', f'cubes_f{field}_c{chip}', '-outfile_type', 'cube','-SLICE_SUFFIX','.%04d.fits' ,'-SAVE_TYPE', 'REPLACE']  
+    command = ['missfits', f'cubes_f{field}_c{chip}', '-outfile_type', 'cube','-SLICE_SUFFIX','.%04d.fits','SPLIT_SUFFIX','.%04d.fits' ,'-SAVE_TYPE', 'REPLACE','-SLICEKEY_FORMAT','%04d']  
     result = subprocess.run(command, check=True,cwd=tmp)
     
-    pattern = os.path.join(tmp, f'cubes_f{field}_c{chip}.0*')
+    pattern = os.path.join(tmp, f'cubes_f{field}_c{chip}.[0-9][0-9][0-9][0-9].fits')
     
     # Find and remove matching files
     for file_path in glob.glob(pattern):

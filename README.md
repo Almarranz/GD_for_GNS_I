@@ -1,20 +1,60 @@
 # Geometric Distortions in GNS
 
+## Pipeline Overview
 
-## There is not yet a define pipeline. Here the name and description of some scripts
+There is not yet a defined pipeline. Below are the names and descriptions of some scripts used in the process.
 
-## 
+## Prepare the Data
+
+- This pipeline uses reduced FITS images from the GNS1 pipeline. These images include flat, sky, etc., and are reduced.
+- At the moment Im copying all the files in the teatime/*cleaned* directory to teabag
+- The images are divided by chips and have no astrometric solution.
+
+### Delete Bad Images
+
+- `gns_cubes_for_inspection.py`: Groups all slices from the cleaned cubes into four cubes (one per chip). This approach is necessary for visual inspection. Note the positions of bad slices and pass this list to the next script.
+- `delete_bad_from_cubes.py`: Deletes bad slices in the cubes. Feed it with a list of bad slices.
+
+  - **Note**: Consider moving this procedure directly to the GNS2 pipeline so that cubes from the `cleaned` directory are actually cleaned.
+  - **Note 2**: You can combine this inspection with `maxitract`. Although it doesn't work perfectly, it can help detect elusive bad slices. See `maxitract_chips.sh` and `maxitract_bad_slices.py`.
+
+    > `maxitract_chips.sh`: Runs `maxitract` on FITS slices for different chips and renames the output file to `maxitract.output`. This script can be found in the GNS1 folder.
+    
+    > `maxitract_bad_slices.py`: Combines all `maxitract` output files into a single list. This is convenient for comparing bad slices selected by `maxitract` with those selected by the operator.
+
+___
 - Runs `missfits`on cubes to divide them into slices. Then make a .list file containing the paths and names of the slices and feed with it `maxitrack`
 - **% missfits -d > default.missfits** generates de default configurataion file. 
 - On the configuration file you can set `OUTFILE_TYPE  SPLIT` and `SAVE_TYPE NEW`. This would slice the MEF and conserve the original file, while saving the slices under a new name.
 - Make a .list files with then names and tha absolutes paths of the new genareted *miss* slices: ** ls *.miss.fits | xargs realpath > part[1,1]_c[1,2,3,4]_fits.list **
+___
 
-### maxitract_chips.sh 
-- Runs maxitract on fits slices for diffentes chips and rename the output file maxitract.output
 
-### maxitraxt_bad_slices.py
+### Initial Geometric Solution
 
-- Combines all the maxitrack output files in a single list. This is combinient for comparing the bad slices selected by maxitrack with the bad slices selected by the operator (me)
+- For the Astromatic machinery to work, the images need an astrometric solution with an accuracy of a few arcseconds.
+- `astrometric_solution.py`: Provides these files with an astrometric solution. It finds matches between the VVVx catalog and the stars present in each chip (using `astroalign` and `sextractor`).
+- Uses `basicASolution.param` as confifguration file for `sextractor`.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
